@@ -14,31 +14,30 @@
     <button type="submit">Log In</button>
   </form>
 
-  <script>
-    // Your Firebase config
+  <script type="module">
+    import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js';
+    import { getAuth, signInWithEmailAndPassword } from 'https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js';
+
     const firebaseConfig = {
       apiKey: "AIzaSyBtEdayVkFQ_Ug2S0eFkJktC81HESeUpBE",
       authDomain: "login-intranet-fb821.firebaseapp.com",
-      projectId: "login-intranet-fb821",
-      // other config
+      projectId: "login-intranet-fb821"
     };
 
-    // Initialize Firebase
-    const app = firebase.initializeApp(firebaseConfig);
-    const auth = firebase.auth();
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
 
     document.getElementById('loginForm').addEventListener('submit', function(e) {
       e.preventDefault();
       const email = document.getElementById('email').value;
       const password = document.getElementById('password').value;
 
-      auth.signInWithEmailAndPassword(email, password)
+      signInWithEmailAndPassword(auth, email, password)
         .then(() => {
-          // Redirect to your Google Site
           window.location.href = "https://sites.google.com/view/vaal-radiology/?read_current=1";
         })
         .catch((error) => {
-          alert(error.message);
+          alert("Login failed: " + error.message);
         });
     });
   </script>
