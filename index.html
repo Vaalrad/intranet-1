@@ -1,132 +1,133 @@
 <!DOCTYPE html>
 <html>
-
 <head>
-    <title>Login</title>
-    <!-- Firebase SDK -->
-    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js"></script>
+  <title>Login</title>
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js"></script>
 
-    <style>
-        /* Basic reset and full page setup for centering */
-        body {
-            margin: 0;
-            padding: 0;
-            font-family: Arial, sans-serif;
-            display: flex;
-            /* Enable Flexbox for centering */
-            justify-content: center;
-            /* Center horizontally */
-            align-items: center;
-            /* Center vertically */
-            min-height: 100vh;
-            /* Ensure body takes full viewport height */
-            background-color: #216e9b;
-            /* Light Blue background for the entire page */
-            overflow: hidden;
-            /* Prevent scrollbars if content slightly exceeds viewport */
-        }
+  <style>
+    /* Basic reset and full page setup for centering */
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+      display: flex; /* Enable Flexbox for centering */
+      justify-content: center; /* Center horizontally */
+      align-items: center; /* Center vertically */
+      min-height: 100vh; /* Ensure body takes full viewport height */
 
-        /* Styling for the login container */
-        .login-container {
-            background-color: #FFFFFF;
-            /* White background for the form itself */
-            padding: 40px;
-            border-radius: 10px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-            /* Subtle shadow for depth */
-            text-align: center;
-            width: 350px;
-            /* Fixed width for the login box */
-            max-width: 90%;
-            /* Ensure it's responsive on smaller screens */
-            border: 6px solid #4D92FF;
-            /* Gold border around the login box */
-        }
+      /* --- NEW BACKGROUND IMAGE STYLES --- */
+      background-image: url('https://via.placeholder.com/1920x1080/000080/FFD700?text=Your+Background+Image'); /* REPLACE THIS URL with your image! */
+      background-size: cover; /* This makes the image cover the entire background */
+      background-position: center; /* Centers the image */
+      background-repeat: no-repeat; /* Prevents the image from repeating */
+      background-attachment: fixed; /* Keeps the background fixed when scrolling (if applicable) */
+      /* --- END NEW BACKGROUND IMAGE STYLES --- */
 
-        /* Heading styling */
-        h2 {
-            color: #000080;
-            /* Dark Blue for the heading */
-            margin-bottom: 25px;
-            font-size: 2em;
-            /* Make heading a bit larger */
-        }
+      overflow: hidden; /* Prevent scrollbars if content slightly exceeds viewport */
+    }
 
-        /* Input field styling */
-        #loginForm input {
-            width: calc(100% - 20px);
-            /* Full width minus padding */
-            padding: 12px 10px;
-            margin-bottom: 15px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            font-size: 1em;
-        }
+    /* Styling for the login container */
+    .login-container {
+      background-color: rgba(255, 255, 255, 0.9); /* Semi-transparent white background for readability */
+      padding: 40px;
+      border-radius: 10px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3); /* Slightly stronger shadow for contrast */
+      text-align: center;
+      width: 350px; /* Fixed width for the login box */
+      max-width: 90%; /* Ensure it's responsive on smaller screens */
+      border: 3px solid #FFD700; /* Gold border around the login box */
+      z-index: 10; /* Ensure the login box is above any background layers */
+      position: relative; /* Needed for z-index to work */
+    }
 
-        /* Button styling */
-        #loginForm button {
-            background-color: #FFD700;
-            /* Gold button background */
-            color: #000080;
-            /* Dark Blue text on button */
-            padding: 12px 25px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 1.1em;
-            font-weight: bold;
-            transition: background-color 0.3s ease;
-            /* Smooth transition for hover effect */
-        }
+    /* Overlay for better readability of the login form on certain images (optional) */
+    body::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 128, 0.2); /* Semi-transparent dark blue overlay */
+      z-index: 1; /* Place it below the login container */
+    }
 
-        #loginForm button:hover {
-            background-color: #DAA520;
-            /* Slightly darker gold on hover */
-        }
-    </style>
+    /* Heading styling */
+    h2 {
+      color: #000080; /* Dark Blue for the heading */
+      margin-bottom: 25px;
+      font-size: 2em; /* Make heading a bit larger */
+    }
+
+    /* Input field styling */
+    #loginForm input {
+      width: calc(100% - 20px); /* Full width minus padding */
+      padding: 12px 10px;
+      margin-bottom: 15px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      font-size: 1em;
+    }
+
+    /* Button styling */
+    #loginForm button {
+      background-color: #FFD700; /* Gold button background */
+      color: #000080; /* Dark Blue text on button */
+      padding: 12px 25px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 1.1em;
+      font-weight: bold;
+      transition: background-color 0.3s ease; /* Smooth transition for hover effect */
+    }
+
+    #loginForm button:hover {
+      background-color: #DAA520; /* Slightly darker gold on hover */
+    }
+  </style>
 </head>
-
 <body>
-    <!-- Wrap your login elements in a container for easier styling -->
-    <div class="login-container">
-        <h2>Login</h2>
-        <form id="loginForm">
-            <input type="email" id="email" placeholder="Email" required><br>
-            <input type="password" id="password" placeholder="Password" required><br>
-            <button type="submit">Log In</button>
-        </form>
-    </div>
+  <!-- Wrap your login elements in a container for easier styling -->
+  <div class="login-container">
+    <h2>Login</h2>
+    <form id="loginForm">
+      <input type="email" id="email" placeholder="Email" required><br>
+      <input type="password" id="password" placeholder="Password" required><br>
+      <button type="submit">Log In</button>
+    </form>
+  </div>
 
-    <script type="module">
-        import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js';
-        import { getAuth, signInWithEmailAndPassword } from 'https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js';
+  <script type="module">
+    import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js';
+    import { getAuth, signInWithEmailAndPassword } from 'https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js';
 
-        const firebaseConfig = {
-            apiKey: "AIzaSyBtEdayVkFQ_Ug2S0eFkJktC81HESeUpBE",
-            authDomain: "login-intranet-fb821.firebaseapp.com",
-            projectId: "login-intranet-fb821"
-        };
+    const firebaseConfig = {
+      apiKey: "AIzaSyBtEdayVkFQ_Ug2S0eFkJktC81HESeUpBE",
+      authDomain: "login-intranet-fb821.firebaseapp.com",
+      projectId: "login-intranet-fb821"
+    };
 
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
 
-        document.getElementById('loginForm').addEventListener('submit', function (e) {
-            e.preventDefault();
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
+    document.getElementById('loginForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
 
-            signInWithEmailAndPassword(auth, email, password)
-                .then(() => {
-                    // On successful login, redirect to the specified URL
-                    window.location.href = "https://sites.google.com/view/vaal-radiology/?read_current=1";
-                })
-                .catch((error) => {
-                    // Display a user-friendly error message
-                    alert("Login failed: " + error.message);
-                });
+      signInWithEmailAndPassword(auth, email, password)
+        .then(() => {
+          // On successful login, redirect to the specified URL
+          window.location.href = "https://sites.google.com/view/vaal-radiology/?read_current=1";
+        })
+        .catch((error) => {
+          // Display a user-friendly error message
+          alert("Login failed: " + error.message);
         });
-    </script>
+    });
+  </script>
 </body>
-
 </html>
