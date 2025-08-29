@@ -1,1 +1,150 @@
-index.html
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Login</title>
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js"></script>
+
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      background-image: url('https://drive.google.com/uc?id=YOUR_BACKGROUND_FILE_ID'); /* ✅ background */
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+    }
+
+    .logo {
+      height: 200px;   /* adjust size */
+      width: auto;
+	  padding: 40px;
+	  position: relative;
+	  top:-60px;
+    }
+
+    h1 {
+      color: #385fa1;
+      font-size: 3em;
+      text-align: center;
+      margin-bottom: 25px;
+    }
+
+    .login-container {
+      background-color: rgba(255, 255, 255, 0.9);
+      padding: 40px;
+      border-radius: 10px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+      text-align: center;
+      width: 350px;
+      max-width: 90%;
+      border: 4px solid #385fa1;
+    }
+
+    h2 {
+      color: #000080;
+      margin-bottom: 25px;
+      font-size: 2em;
+    }
+
+    #loginForm input {
+      width: calc(100% - 20px);
+      padding: 12px 10px;
+      margin-bottom: 15px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      font-size: 1em;
+    }
+
+    #loginForm button {
+      background-color: #FFD700;
+      color: #000080;
+      padding: 12px 25px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 1.1em;
+      font-weight: bold;
+      transition: background-color 0.3s ease;
+    }
+
+    #loginForm button:hover {
+      background-color: #DAA520;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- ✅ Logo -->
+  <img class="logo" src="logo.png" alt="Vaal Radiology Logo">
+
+  <!-- ✅ Title -->
+  <h1><b>Welcome to new <br><b>Vaal Radiology's Intranet<div></b></h1>
+
+  <!-- ✅ Login box -->
+  <div class="login-container">
+    <h2>Login</h2>
+    <form id="loginForm">
+      <input type="email" id="email" placeholder="Email" required><br>
+      <input type="password" id="password" placeholder="Password" required><br>
+      <button type="submit">Log In</button>
+    </form>
+  </div>
+
+  <script type="module">
+    import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js';
+    import { getAuth, signInWithEmailAndPassword } from 'https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js';
+
+    // ✅ Use FULL Firebase config from your Firebase Console
+    const firebaseConfig = {
+  apiKey: "AIzaSyBtEdayVkFQ_Ug2S0eFkJktC81HESeUpBE",
+  authDomain: "login-intranet-fb821.firebaseapp.com",
+  projectId: "login-intranet-fb821",
+  storageBucket: "login-intranet-fb821.firebasestorage.app",
+  messagingSenderId: "721373194464",
+  appId: "1:721373194464:web:fc20d062aab1314ac38885",
+  measurementId: "G-G55NCPT2CY"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+
+    document.getElementById('loginForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+
+      signInWithEmailAndPassword(auth, email, password)
+  .then(() => {
+    // ✅ Log successful login
+    fetch("https://script.google.com/macros/s/AKfycby1IX0XcvDGLwic0RLfxPzuC4vnWP7GAosPFbLCpe62a-eFhPTUb1SGRXSCbL3Jl9b_JQ/exec", {
+      method: "POST",
+      body: JSON.stringify({ email: email, status: "Success" }),
+      headers: { "Content-Type": "application/json" }
+    });
+
+    // Redirect
+    window.location.href = "https://sites.google.com/view/vaal-radiology/home";
+  })
+  .catch((error) => {
+    // ❌ Log failed login
+    fetch("https://script.google.com/macros/s/AKfycby1IX0XcvDGLwic0RLfxPzuC4vnWP7GAosPFbLCpe62a-eFhPTUb1SGRXSCbL3Jl9b_JQ/exec", {
+      method: "POST",
+      body: JSON.stringify({ email: email, status: "Failed: " + error.message }),
+      headers: { "Content-Type": "application/json" }
+    });
+
+    alert("Login failed: " + error.message);
+  });
+
+  </script>
+</body>
+</html>
