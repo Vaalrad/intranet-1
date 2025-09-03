@@ -62,6 +62,14 @@
       transition: background-color 0.3s ease;
     }
     #loginForm button:hover { background-color: #DAA520; }
+
+    .reset-link {
+      margin-top: 15px;
+      display: block;
+      color: #385fa1;
+      text-decoration: underline;
+      cursor: pointer;
+    }
   </style>
 </head>
 
@@ -76,14 +84,20 @@
       <input type="password" id="password" placeholder="Password" required><br>
       <button type="submit">Log In</button>
     </form>
+    <!-- ✅ Forgot password -->
+    <a href="#" id="resetPasswordLink" class="reset-link">Forgot password?</a>
   </div>
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
-    import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
+    import { 
+      getAuth, 
+      signInWithEmailAndPassword, 
+      sendPasswordResetEmail 
+    } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
     import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
 
-    // ✅ Replace with your full Firebase config
+    // ✅ Firebase config
     const firebaseConfig = {
       apiKey: "AIzaSyBtEdayVkFQ_Ug2S0eFkJktC81HESeUpBE",
       authDomain: "login-intranet-fb821.firebaseapp.com",
@@ -98,6 +112,7 @@
     const auth = getAuth(app);
     const db = getFirestore(app);
 
+    // ✅ Login handler
     document.getElementById("loginForm").addEventListener("submit", function(e) {
       e.preventDefault();
       const email = document.getElementById("email").value;
@@ -105,25 +120,53 @@
 
       signInWithEmailAndPassword(auth, email, password)
         .then(() => {
-          // ✅ Log successful login in Firestore
           addDoc(collection(db, "loginLogs"), {
             email: email,
             status: "Success",
+            type: "Login",
             timestamp: new Date()
           });
-
-          // Redirect after success
           window.location.href = "https://sites.google.com/view/vaal-radiology/home";
         })
         .catch((error) => {
-          // ❌ Log failed login in Firestore
           addDoc(collection(db, "loginLogs"), {
             email: email,
             status: "Failed: " + error.message,
+            type: "Login",
             timestamp: new Date()
           });
-
           alert("Login failed: " + error.message);
+        });
+    });
+
+    // ✅ Reset password handler
+    document.getElementById("resetPasswordLink").addEventListener("click", function(e) {
+      e.preventDefault();
+      const email = document.getElementById("email").value;
+
+      if (!email) {
+        alert("Please enter your email address first.");
+        return;
+      }
+
+      sendPasswordResetEmail(auth, email)
+        .then(() => {
+          addDoc(collection(db, "loginLogs"), {
+            email: email,
+            status: "Password reset email sent",
+            type: "PasswordReset",
+            timestamp: new Date()
+          });
+          alert("✅ Password reset email sent! Please check your inbox.");
+        })
+        .catch((error) => {
+          addDoc(collection(db, "loginLogs"), {
+            email: email,
+            status: "Failed: " + error.message,
+            type: "PasswordReset",
+            timestamp: new Date()
+          });
+          alert("❌ Error: " + error.message);
         });
     });
   </script>
