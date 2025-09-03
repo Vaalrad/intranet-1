@@ -5,6 +5,7 @@
   <!-- Firebase SDK -->
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js"></script>
 
   <style>
     body {
@@ -16,28 +17,20 @@
       justify-content: center;
       align-items: center;
       min-height: 100vh;
-      background-image: url('https://drive.google.com/uc?id=YOUR_BACKGROUND_FILE_ID'); /* ✅ background */
+      background-image: url('https://drive.google.com/uc?id=YOUR_BACKGROUND_FILE_ID');
       background-size: cover;
       background-position: center;
       background-repeat: no-repeat;
       background-attachment: fixed;
     }
-
     .logo {
-      height: 200px;   /* adjust size */
+      height: 200px;
       width: auto;
-	  padding: 40px;
-	  position: relative;
-	  top:-60px;
+      padding: 40px;
+      position: relative;
+      top: -60px;
     }
-
-    h1 {
-      color: #385fa1;
-      font-size: 3em;
-      text-align: center;
-      margin-bottom: 25px;
-    }
-
+    h1 { color: #385fa1; font-size: 3em; text-align: center; margin-bottom: 25px; }
     .login-container {
       background-color: rgba(255, 255, 255, 0.9);
       padding: 40px;
@@ -48,13 +41,7 @@
       max-width: 90%;
       border: 4px solid #385fa1;
     }
-
-    h2 {
-      color: #000080;
-      margin-bottom: 25px;
-      font-size: 2em;
-    }
-
+    h2 { color: #000080; margin-bottom: 25px; font-size: 2em; }
     #loginForm input {
       width: calc(100% - 20px);
       padding: 12px 10px;
@@ -63,7 +50,6 @@
       border-radius: 5px;
       font-size: 1em;
     }
-
     #loginForm button {
       background-color: #FFD700;
       color: #000080;
@@ -75,21 +61,14 @@
       font-weight: bold;
       transition: background-color 0.3s ease;
     }
-
-    #loginForm button:hover {
-      background-color: #DAA520;
-    }
+    #loginForm button:hover { background-color: #DAA520; }
   </style>
 </head>
 
 <body>
-  <!-- ✅ Logo -->
   <img class="logo" src="logo.png" alt="Vaal Radiology Logo">
+  <h1><b>Welcome to new <br>Vaal Radiology's Intranet</b></h1>
 
-  <!-- ✅ Title -->
-  <h1><b>Welcome to new <br><b>Vaal Radiology's Intranet<div></b></h1>
-
-  <!-- ✅ Login box -->
   <div class="login-container">
     <h2>Login</h2>
     <form id="loginForm">
@@ -100,51 +79,53 @@
   </div>
 
   <script type="module">
-    import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js';
-    import { getAuth, signInWithEmailAndPassword } from 'https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js';
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
+    import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
+    import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
 
-    // ✅ Use FULL Firebase config from your Firebase Console
+    // ✅ Replace with your full Firebase config
     const firebaseConfig = {
-  apiKey: "AIzaSyBtEdayVkFQ_Ug2S0eFkJktC81HESeUpBE",
-  authDomain: "login-intranet-fb821.firebaseapp.com",
-  projectId: "login-intranet-fb821",
-  storageBucket: "login-intranet-fb821.firebasestorage.app",
-  messagingSenderId: "721373194464",
-  appId: "1:721373194464:web:fc20d062aab1314ac38885",
-  measurementId: "G-G55NCPT2CY"
+      apiKey: "AIzaSyBtEdayVkFQ_Ug2S0eFkJktC81HESeUpBE",
+      authDomain: "login-intranet-fb821.firebaseapp.com",
+      projectId: "login-intranet-fb821",
+      storageBucket: "login-intranet-fb821.appspot.com",
+      messagingSenderId: "721373194464",
+      appId: "1:721373194464:web:fc20d062aab1314ac38885",
+      measurementId: "G-G55NCPT2CY"
     };
 
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
+    const db = getFirestore(app);
 
-    document.getElementById('loginForm').addEventListener('submit', function(e) {
+    document.getElementById("loginForm").addEventListener("submit", function(e) {
       e.preventDefault();
-      const email = document.getElementById('email').value;
-      const password = document.getElementById('password').value;
+      const email = document.getElementById("email").value;
+      const password = document.getElementById("password").value;
 
       signInWithEmailAndPassword(auth, email, password)
-  .then(() => {
-    // ✅ Log successful login
-    fetch("https://script.google.com/macros/s/AKfycby1IX0XcvDGLwic0RLfxPzuC4vnWP7GAosPFbLCpe62a-eFhPTUb1SGRXSCbL3Jl9b_JQ/exec", {
-      method: "POST",
-      body: JSON.stringify({ email: email, status: "Success" }),
-      headers: { "Content-Type": "application/json" }
+        .then(() => {
+          // ✅ Log successful login in Firestore
+          addDoc(collection(db, "loginLogs"), {
+            email: email,
+            status: "Success",
+            timestamp: new Date()
+          });
+
+          // Redirect after success
+          window.location.href = "https://sites.google.com/view/vaal-radiology/home";
+        })
+        .catch((error) => {
+          // ❌ Log failed login in Firestore
+          addDoc(collection(db, "loginLogs"), {
+            email: email,
+            status: "Failed: " + error.message,
+            timestamp: new Date()
+          });
+
+          alert("Login failed: " + error.message);
+        });
     });
-
-    // Redirect
-    window.location.href = "https://sites.google.com/view/vaal-radiology/home";
-  })
-  .catch((error) => {
-    // ❌ Log failed login
-    fetch("https://script.google.com/macros/s/AKfycby1IX0XcvDGLwic0RLfxPzuC4vnWP7GAosPFbLCpe62a-eFhPTUb1SGRXSCbL3Jl9b_JQ/exec", {
-      method: "POST",
-      body: JSON.stringify({ email: email, status: "Failed: " + error.message }),
-      headers: { "Content-Type": "application/json" }
-    });
-
-    alert("Login failed: " + error.message);
-  });
-
   </script>
 </body>
 </html>
