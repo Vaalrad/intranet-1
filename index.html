@@ -1,218 +1,173 @@
-<!DOCTYPE html>
+cat > /tmp/export.py << 'PY'
+import base64, os
+
+assets_dir = "/dev-server/src/assets"
+images = {}
+for fname in ["hero-logo.jpg", "gallery-1.jpg", "gallery-2.jpg", "gallery-3.jpg"]:
+    path = os.path.join(assets_dir, fname)
+    if os.path.exists(path):
+        with open(path, "rb") as f:
+            images[fname] = base64.b64encode(f.read()).decode()
+
+html = f'''<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Login | Vaal Radiology Intranet</title>
-  
-  <style>
-    :root {
-      --primary-blue: #2c5282;
-      --secondary-gold: #ecc94b;
-      --hover-gold: #d69e2e;
-      --text-dark: #2d3748;
-      --bg-light: #f7fafc;
-    }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vaal Radiology Inc — Intranet</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Source+Sans+3:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{{box-sizing:border-box;margin:0;padding:0}}
+:root{{--primary:#0d8fad;--primary-fg:#fff;--bg:#f7f8fa;--fg:#1a2332;--card:#fff;--muted:#6b7a8d;--border:#dde2e8;--radius:0.5rem}}
+body{{font-family:'Source Sans 3',sans-serif;background:var(--bg);color:var(--fg);line-height:1.6}}
+h1,h2,h3{{font-family:'Playfair Display',serif}}
+a{{text-decoration:none;color:inherit}}
 
-    body {
-      margin: 0;
-      padding: 0;
-      font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh;
-      /* Modern Gradient overlay + Background */
-      background: linear-gradient(rgba(44, 82, 130, 0.8), rgba(44, 82, 130, 0.4)), 
-                  url('https://images.unsplash.com/photo-1516549655169-df83a0774514?auto=format&fit=crop&q=80&w=2070') no-repeat center center fixed;
-      background-size: cover;
-    }
+/* NAV */
+.nav{{position:sticky;top:0;z-index:50;background:var(--card);border-bottom:1px solid var(--border);box-shadow:0 1px 3px rgba(0,0,0,.06)}}
+.nav-inner{{max-width:1200px;margin:auto;padding:0 1.5rem;display:flex;align-items:center;justify-content:space-between;height:64px}}
+.nav-brand{{display:flex;align-items:center;gap:.75rem;font-weight:600;font-size:1.1rem}}
+.nav-brand-icon{{width:40px;height:40px;border-radius:50%;background:rgba(13,143,173,.1);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.85rem;color:var(--primary)}}
+.nav-links{{display:flex;gap:.25rem;list-style:none}}
+.nav-links a{{padding:.5rem .75rem;font-size:.7rem;font-weight:500;letter-spacing:.08em;border-radius:var(--radius);color:var(--muted);transition:all .2s}}
+.nav-links a:hover,.nav-links a.active{{background:var(--primary);color:var(--primary-fg)}}
 
-    .login-card {
-      background: rgba(255, 255, 255, 0.95);
-      backdrop-filter: blur(10px);
-      padding: 3rem;
-      border-radius: 20px;
-      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2), 0 10px 10px -5px rgba(0, 0, 0, 0.1);
-      width: 100%;
-      max-width: 400px;
-      text-align: center;
-      border-top: 5px solid var(--primary-blue);
-    }
+/* HERO */
+.hero{{padding:4rem 1.5rem;max-width:1200px;margin:auto;display:flex;align-items:center;gap:4rem;flex-wrap:wrap}}
+.hero img{{width:100%;max-width:500px;border-radius:var(--radius);box-shadow:0 8px 30px rgba(0,0,0,.12)}}
+.hero-text{{flex:1;min-width:280px}}
+.hero-text h1{{font-size:2.2rem;margin-bottom:1.5rem}}
+.hero-text p{{color:var(--muted);margin-bottom:2rem;font-size:1.05rem}}
+.btn-outline{{display:inline-block;padding:.75rem 2rem;border:2px solid var(--primary);color:var(--primary);font-weight:600;font-size:.85rem;letter-spacing:.08em;border-radius:var(--radius);transition:all .3s}}
+.btn-outline:hover{{background:var(--primary);color:#fff}}
 
-    .logo {
-      width: 120px;
-      margin-bottom: 1.5rem;
-    }
+/* QUICK LINKS */
+.quick-links{{background:var(--card);padding:4rem 1.5rem}}
+.quick-links-inner{{max-width:1200px;margin:auto;text-align:center}}
+.quick-links h2{{font-size:1.8rem;margin-bottom:2.5rem}}
+.links-grid{{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:1rem}}
+.links-grid a{{padding:.75rem 1rem;border:1px solid var(--border);border-radius:var(--radius);font-size:.9rem;font-weight:500;transition:all .3s}}
+.links-grid a:hover{{background:var(--primary);color:#fff;border-color:var(--primary)}}
 
-    h1 {
-      color: var(--primary-blue);
-      font-size: 1.5rem;
-      margin-bottom: 0.5rem;
-      font-weight: 700;
-      letter-spacing: -0.5px;
-    }
+/* GALLERY */
+.gallery{{padding:4rem 1.5rem;max-width:1200px;margin:auto}}
+.gallery-grid{{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1.5rem}}
+.gallery-grid img{{width:100%;height:250px;object-fit:cover;border-radius:var(--radius);box-shadow:0 4px 15px rgba(0,0,0,.1);transition:transform .4s}}
+.gallery-grid img:hover{{transform:scale(1.03)}}
 
-    p.subtitle {
-      color: #718096;
-      margin-bottom: 2rem;
-      font-size: 0.9rem;
-    }
+/* FOOTER */
+footer{{background:var(--fg);color:var(--bg);padding:2rem 1.5rem;text-align:center;font-size:.85rem}}
+footer a{{color:var(--bg);opacity:.8}}
+footer p{{opacity:.5;margin-top:.75rem;font-size:.75rem}}
 
-    .form-group {
-      text-align: left;
-      margin-bottom: 1.25rem;
-    }
+/* LOGIN */
+.login-page{{min-height:100vh;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,hsl(210 40% 12%),hsl(195 80% 20%),hsl(210 50% 8%));position:relative;overflow:hidden}}
+.login-page::before{{content:'';position:absolute;top:-200px;left:-200px;width:600px;height:600px;background:rgba(13,143,173,.12);border-radius:50%;filter:blur(120px)}}
+.login-card{{position:relative;z-index:1;background:rgba(20,30,42,.85);backdrop-filter:blur(20px);border:1px solid rgba(13,143,173,.15);border-radius:1rem;padding:2.5rem;width:100%;max-width:420px;box-shadow:0 20px 60px rgba(0,0,0,.4)}}
+.login-card .logo{{width:80px;height:80px;border-radius:1rem;overflow:hidden;margin:0 auto 1.5rem;border:2px solid rgba(13,143,173,.3)}}
+.login-card .logo img{{width:100%;height:100%;object-fit:cover}}
+.login-card h1{{color:#fff;font-size:1.8rem;text-align:center;margin-bottom:.5rem}}
+.login-card .subtitle{{text-align:center;color:hsl(195 60% 70%);font-size:.8rem;letter-spacing:.1em;text-transform:uppercase;margin-bottom:2rem}}
+.login-card label{{display:block;font-size:.7rem;color:hsl(195 40% 65%);text-transform:uppercase;letter-spacing:.1em;margin-bottom:.5rem}}
+.login-card input{{width:100%;padding:.75rem 1rem;background:rgba(10,18,28,.6);border:1px solid rgba(13,143,173,.2);border-radius:var(--radius);color:#fff;font-size:.95rem;margin-bottom:1rem;outline:none;transition:border .2s}}
+.login-card input:focus{{border-color:rgba(13,143,173,.5)}}
+.login-card .btn-login{{width:100%;padding:.85rem;background:linear-gradient(135deg,hsl(195 80% 36%),hsl(195 70% 45%));color:#fff;border:none;border-radius:var(--radius);font-weight:600;font-size:.9rem;cursor:pointer;letter-spacing:.05em;transition:opacity .3s}}
+.login-card .btn-login:hover{{opacity:.9}}
+.login-card .forgot{{display:block;text-align:right;font-size:.75rem;color:hsl(195 60% 55%);margin-bottom:1.5rem;cursor:pointer}}
+.login-footer{{text-align:center;margin-top:1.5rem;font-size:.7rem;color:hsl(210 15% 40%)}}
 
-    input {
-      width: 100%;
-      padding: 12px 16px;
-      box-sizing: border-box;
-      border: 1px solid #e2e8f0;
-      border-radius: 8px;
-      font-size: 1rem;
-      transition: all 0.3s ease;
-      background: #fdfdfd;
-    }
+/* PAGE BREAK */
+.page-divider{{text-align:center;padding:3rem 1rem;background:var(--bg)}}
+.page-divider h2{{font-size:1.5rem;color:var(--muted);border-bottom:2px solid var(--border);display:inline-block;padding-bottom:.5rem}}
 
-    input:focus {
-      outline: none;
-      border-color: var(--primary-blue);
-      box-shadow: 0 0 0 3px rgba(44, 82, 130, 0.2);
-    }
-
-    button {
-      width: 100%;
-      background-color: var(--secondary-gold);
-      color: var(--primary-blue);
-      padding: 12px;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      font-size: 1rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      transition: all 0.3s ease;
-      margin-top: 1rem;
-    }
-
-    button:hover {
-      background-color: var(--hover-gold);
-      transform: translateY(-1px);
-    }
-
-    .reset-link {
-      margin-top: 1.5rem;
-      display: inline-block;
-      color: var(--primary-blue);
-      text-decoration: none;
-      font-size: 0.85rem;
-      font-weight: 600;
-      transition: opacity 0.2s;
-    }
-
-    .reset-link:hover {
-      text-decoration: underline;
-      opacity: 0.8;
-    }
-
-    /* Loading state */
-    button:disabled {
-      background-color: #cbd5e0;
-      cursor: not-allowed;
-    }
-  </style>
+@media(max-width:768px){{
+  .hero{{flex-direction:column;padding:2rem 1rem;gap:2rem}}
+  .nav-links{{display:none}}
+}}
+</style>
 </head>
-
 <body>
 
-  <div class="login-card">
-    <img class="logo" src="logo.png" alt="Vaal Radiology Logo">
-    <h1>Vaal Radiology</h1>
-    <p class="subtitle">Secure Intranet Access</p>
+<!-- ==================== INTRANET HOME PAGE ==================== -->
 
-    <form id="loginForm">
-      <div class="form-group">
-        <input type="email" id="email" placeholder="Email Address" required>
-      </div>
-      <div class="form-group">
-        <input type="password" id="password" placeholder="Password" required>
-      </div>
-      <button type="submit" id="loginBtn">Log In</button>
-    </form>
-
-    <a href="#" id="resetPasswordLink" class="reset-link">Forgot your password?</a>
+<nav class="nav">
+  <div class="nav-inner">
+    <div class="nav-brand">
+      <div class="nav-brand-icon">VR</div>
+      Vaal Radiology
+    </div>
+    <div class="nav-links">
+      <a href="#" class="active">HOME</a>
+      <a href="#">RECEPTION SOP AND PROTOCOLS</a>
+      <a href="#">RADIOGRAPHERS PROTOCOLS</a>
+      <a href="#">HUMAN RESOURCES</a>
+      <a href="#">IT POLICIES</a>
+      <a href="#">HEALTH AND SAFETY</a>
+      <a href="#">GALLERY</a>
+    </div>
   </div>
+</nav>
 
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
-    import { 
-      getAuth, 
-      signInWithEmailAndPassword, 
-      sendPasswordResetEmail 
-    } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
-    import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
+<section class="hero">
+  <img src="data:image/jpeg;base64,{images.get("hero-logo.jpg","")}" alt="Vaal Radiology Logo">
+  <div class="hero-text">
+    <h1>About Vaal Radiology Inc</h1>
+    <p>Our company intranet serves as a centralized hub for accessing important documents, including company policies, health and safety protocols, and standard operating procedures (SOPs). All employees are encouraged to utilize this resource to stay informed and access necessary information.</p>
+    <a href="https://vaalrad.co.za/about/" class="btn-outline" target="_blank">EXPLORE NOW</a>
+  </div>
+</section>
 
-    const firebaseConfig = {
-      apiKey: "AIzaSyBtEdayVkFQ_Ug2S0eFkJktC81HESeUpBE",
-      authDomain: "login-intranet-fb821.firebaseapp.com",
-      projectId: "login-intranet-fb821",
-      storageBucket: "login-intranet-fb821.appspot.com",
-      messagingSenderId: "721373194464",
-      appId: "1:721373194464:web:fc20d062aab1314ac38885",
-      measurementId: "G-G55NCPT2CY"
-    };
+<section class="quick-links">
+  <div class="quick-links-inner">
+    <h2>Quick Links</h2>
+    <div class="links-grid">
+      <a href="#">Reception MPH SOPs</a>
+      <a href="#">Safety Protocols</a>
+      <a href="#">IT Policies</a>
+      <a href="#">Radiographer's</a>
+    </div>
+  </div>
+</section>
 
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-    const db = getFirestore(app);
+<section class="gallery">
+  <div class="gallery-grid">
+    <img src="data:image/jpeg;base64,{images.get("gallery-1.jpg","")}" alt="Vaal Radiology facility 1">
+    <img src="data:image/jpeg;base64,{images.get("gallery-2.jpg","")}" alt="Vaal Radiology facility 2">
+    <img src="data:image/jpeg;base64,{images.get("gallery-3.jpg","")}" alt="Vaal Radiology facility 3">
+  </div>
+</section>
 
-    const loginBtn = document.getElementById("loginBtn");
+<footer>
+  <a href="https://www.tiktok.com/@vaal.radiology" target="_blank">TIKTOK</a>
+  <p>&copy; 2025 Vaal Radiology Inc. All rights reserved.</p>
+</footer>
 
-    document.getElementById("loginForm").addEventListener("submit", async function(e) {
-      e.preventDefault();
-      loginBtn.disabled = true;
-      loginBtn.innerText = "Authenticating...";
+<!-- ==================== LOGIN PAGE ==================== -->
 
-      const email = document.getElementById("email").value;
-      const password = document.getElementById("password").value;
+<div class="page-divider"><h2>Login Page</h2></div>
 
-      try {
-        await signInWithEmailAndPassword(auth, email, password);
-        await addDoc(collection(db, "loginLogs"), {
-          email, status: "Success", type: "Login", timestamp: new Date()
-        });
-        window.location.href = "https://sites.google.com/view/vaal-radiology/home";
-      } catch (error) {
-        await addDoc(collection(db, "loginLogs"), {
-          email, status: "Failed: " + error.message, type: "Login", timestamp: new Date()
-        });
-        alert("Login failed: " + error.message);
-        loginBtn.disabled = false;
-        loginBtn.innerText = "Log In";
-      }
-    });
+<div class="login-page">
+  <div class="login-card">
+    <div class="logo"><img src="data:image/jpeg;base64,{images.get("hero-logo.jpg","")}" alt="Logo"></div>
+    <h1>Welcome Back</h1>
+    <p class="subtitle">Vaal Radiology Intranet</p>
+    <form>
+      <label>Email Address</label>
+      <input type="email" placeholder="you@vaalradiology.co.za">
+      <label>Password</label>
+      <input type="password" placeholder="••••••••">
+      <span class="forgot">Forgot password?</span>
+      <button type="button" class="btn-login">Sign In &rarr;</button>
+    </form>
+    <p class="login-footer">&copy; 2025 Vaal Radiology Inc. All rights reserved.</p>
+  </div>
+</div>
 
-    document.getElementById("resetPasswordLink").addEventListener("click", async function(e) {
-      e.preventDefault();
-      const email = document.getElementById("email").value;
-
-      if (!email) {
-        alert("Please enter your email address in the field first.");
-        return;
-      }
-
-      try {
-        await sendPasswordResetEmail(auth, email);
-        await addDoc(collection(db, "loginLogs"), {
-          email, status: "Password reset email sent", type: "PasswordReset", timestamp: new Date()
-        });
-        alert("✅ Password reset email sent! Check your inbox.");
-      } catch (error) {
-        alert("❌ Error: " + error.message);
-      }
-    });
-  </script>
 </body>
-</html>
+</html>'''
+
+with open("/mnt/documents/vaal-radiology-intranet.html", "w") as f:
+    f.write(html)
+print("Done — file written")
+PY
+python3 /tmp/export.py
