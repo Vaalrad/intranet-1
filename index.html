@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vaal Radiology Inc — Intranet</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Source+Sans+3:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+        :root{--primary:#0d8fad;--primary-fg:#fff;--bg:#f7f8fa;--fg:#1a2332;--card:#fff;--muted:#6b7a8d;--border:#dde2e8;--radius:0.5rem}
+        body{font-family:'Source Sans 3',sans-serif;background:var(--bg);color:var(--fg);line-height:1.6; overflow-x: hidden;}
+        h1,h2,h3{font-family:'Playfair Display',serif}
+        a{text-decoration:none;color:inherit; cursor: pointer;}
+        .hidden { display: none !important; }
+
+        /* NAV */
+        .nav{position:sticky;top:0;z-index:50;background:var(--card);border-bottom:1px solid var(--border);box-shadow:0 1px 3px rgba(0,0,0,.06)}
+        .nav-inner{{max-width:1200px;margin:auto;padding:0 1.5rem;display:flex;align-items:center;justify-content:space-between;height:64px}}
+        .nav-brand{display:flex;align-items:center;gap:.75rem;font-weight:600;font-size:1.1rem}
+        .nav-brand-icon{width:40px;height:40px;border-radius:50%;background:rgba(13,143,173,.1);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.85rem;color:var(--primary)}
+        .nav-links{display:flex;gap:.25rem;list-style:none}
+        .nav-links a{padding:.5rem .75rem;font-size:.7rem;font-weight:500;letter-spacing:.08em;border-radius:var(--radius);color:var(--muted);transition:all .2s}
+        .nav-links a:hover,.nav-links a.active{background:var(--primary);color:var(--primary-fg)}
+
+        /* HERO */
+        .hero{padding:4rem 1.5rem;max-width:1200px;margin:auto;display:flex;align-items:center;gap:4rem;flex-wrap:wrap}
+        .hero img{width:100%;max-width:500px;border-radius:var(--radius);box-shadow:0 8px 30px rgba(0,0,0,.12); background: #eee;}
+        .hero-text{flex:1;min-width:280px}
+        .hero-text h1{font-size:2.2rem;margin-bottom:1.5rem}
+        .hero-text p{color:var(--muted);margin-bottom:2rem;font-size:1.05rem}
+        .btn-outline{display:inline-block;padding:.75rem 2rem;border:2px solid var(--primary);color:var(--primary);font-weight:600;font-size:.85rem;letter-spacing:.08em;border-radius:var(--radius);transition:all .3s}
+        .btn-outline:hover{background:var(--primary);color:#fff}
+
+        /* QUICK LINKS */
+        .quick-links{background:var(--card);padding:4rem 1.5rem}
+        .quick-links-inner{max-width:1200px;margin:auto;text-align:center}
+        .quick-links h2{font-size:1.8rem;margin-bottom:2.5rem}
+        .links-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:1rem}
+        .links-grid a{padding:.75rem 1rem;border:1px solid var(--border);border-radius:var(--radius);font-size:.9rem;font-weight:500;transition:all .3s}
+        .links-grid a:hover{background:var(--primary);color:#fff;border-color:var(--primary)}
+
+        /* GALLERY */
+        .gallery{padding:4rem 1.5rem;max-width:1200px;margin:auto}
+        .gallery-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1.5rem}
+        .gallery-grid img{width:100%;height:250px;object-fit:cover;border-radius:var(--radius);box-shadow:0 4px 15px rgba(0,0,0,.1);transition:transform .4s; background: #eee;}
+        .gallery-grid img:hover{transform:scale(1.03)}
+
+        /* FOOTER */
+        footer{background:var(--fg);color:var(--bg);padding:2rem 1.5rem;text-align:center;font-size:.85rem}
+        footer a{color:var(--bg);opacity:.8}
+        footer p{opacity:.5;margin-top:.75rem;font-size:.75rem}
+
+        /* LOGIN PAGE */
+        .login-page{min-height:100vh;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,hsl(210 40% 12%),hsl(195 80% 20%),hsl(210 50% 8%));position:fixed; inset:0; z-index: 100;}
+        .login-card{position:relative;z-index:1;background:rgba(20,30,42,.85);backdrop-filter:blur(20px);border:1px solid rgba(13,143,173,.15);border-radius:1rem;padding:2.5rem;width:100%;max-width:420px;box-shadow:0 20px 60px rgba(0,0,0,.4)}
+        .login-card .logo{width:80px;height:80px;border-radius:1rem;overflow:hidden;margin:0 auto 1.5rem;border:2px solid rgba(13,143,173,.3); background: #111;}
+        .login-card h1{color:#fff;font-size:1.8rem;text-align:center;margin-bottom:.5rem}
+        .login-card .subtitle{text-align:center;color:hsl(195 60% 70%);font-size:.8rem;letter-spacing:.1em;text-transform:uppercase;margin-bottom:2rem}
+        .login-card label{display:block;font-size:.7rem;color:hsl(195 40% 65%);text-transform:uppercase;letter-spacing:.1em;margin-bottom:.5rem}
+        .login-card input{width:100%;padding:.75rem 1rem;background:rgba(10,18,28,.6);border:1px solid rgba(13,143,173,.2);border-radius:var(--radius);color:#fff;font-size:.95rem;margin-bottom:1rem;outline:none}
+        .login-card .btn-login{width:100%;padding:.85rem;background:linear-gradient(135deg,hsl(195 80% 36%),hsl(195 70% 45%));color:#fff;border:none;border-radius:var(--radius);font-weight:600;cursor:pointer}
+
+        @media(max-width:768px){
+            .hero{flex-direction:column;padding:2rem 1rem;gap:2rem}
+            .nav-links{display:none}
+        }
+    </style>
+</head>
+<body>
+
+<!-- LOGIN SCREEN -->
+<div id="login-screen" class="login-page">
+    <div class="login-card">
+        <div class="logo">
+            <!-- Replace with your actual logo path -->
+            <img src="assets/hero-logo.jpg" alt="Logo" onerror="this.style.display='none'">
+        </div>
+        <h1>Welcome Back</h1>
+        <p class="subtitle">Vaal Radiology Intranet</p>
+        <form id="login-form">
+            <label>Email Address</label>
+            <input type="email" placeholder="you@vaalradiology.co.za" required>
+            <label>Password</label>
+            <input type="password" placeholder="••••••••" required>
+            <button type="submit" class="btn-login">Sign In &rarr;</button>
+        </form>
+    </div>
+</div>
+
+<!-- MAIN CONTENT (Hidden until login) -->
+<div id="main-content" class="hidden">
+    <nav class="nav">
+        <div class="nav-inner">
+            <div class="nav-brand">
+                <div class="nav-brand-icon">VR</div>
+                Vaal Radiology
+            </div>
+            <div class="nav-links">
+                <a onclick="showSection('home')" class="active">HOME</a>
+                <a>RECEPTION SOP</a>
+                <a>RADIOGRAPHERS</a>
+                <a>HR</a>
+                <a>IT POLICIES</a>
+                <a onclick="logout()">LOGOUT</a>
+            </div>
+        </div>
+    </nav>
+
+    <section class="hero">
+        <img src="assets/hero-logo.jpg" alt="Vaal Radiology Logo" onerror="this.parentElement.style.display='grid'">
+        <div class="hero-text">
+            <h1>About Vaal Radiology Inc</h1>
+            <p>Our company intranet serves as a centralized hub for accessing important documents, including company policies, health and safety protocols, and standard operating procedures (SOPs).</p>
+            <a href="https://vaalrad.co.za/about/" class="btn-outline" target="_blank">EXPLORE NOW</a>
+        </div>
+    </section>
+
+    <section class="quick-links">
+        <div class="quick-links-inner">
+            <h2>Quick Links</h2>
+            <div class="links-grid">
+                <a href="#">Reception MPH SOPs</a>
+                <a href="#">Safety Protocols</a>
+                <a href="#">IT Policies</a>
+                <a href="#">Radiographer's</a>
+            </div>
+        </div>
+    </section>
+
+    <section class="gallery">
+        <div class="gallery-grid">
+            <img src="assets/gallery-1.jpg" alt="Facility 1">
+            <img src="assets/gallery-2.jpg" alt="Facility 2">
+            <img src="assets/gallery-3.jpg" alt="Facility 3">
+        </div>
+    </section>
+
+    <footer>
+        <p>&copy; 2025 Vaal Radiology Inc. All rights reserved.</p>
+    </footer>
+</div>
+
+<script>
+    const loginForm = document.getElementById('login-form');
+    const loginScreen = document.getElementById('login-screen');
+    const mainContent = document.getElementById('main-content');
+
+    // Handle Login
+    loginForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        // Here you would normally validate with a server
+        loginScreen.classList.add('hidden');
+        mainContent.classList.remove('hidden');
+    });
+
+    // Handle Logout
+    function logout() {
+        mainContent.classList.add('hidden');
+        loginScreen.classList.remove('hidden');
+    }
+</script>
+
+</body>
+</html>
