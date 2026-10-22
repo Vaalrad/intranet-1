@@ -1,262 +1,294 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Vaal Radiology - Intranet Login</title>
-  <style>
-    /* Reset & Base Styles */
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-    }
-
-    body {
-      background-color: #f8fafc;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      min-height: 100vh;
-      color: #1a202c;
-    }
-
-    /* Header & Branding */
-    .brand-container {
-      text-align: center;
-      margin-bottom: 24px;
-    }
-
-    .logo {
-      max-width: 180px;
-      height: auto;
-      margin-bottom: 12px;
-    }
-
-    .brand-container h1 {
-      font-size: 24px;
-      font-weight: 700;
-      color: #2d3748;
-      margin-bottom: 4px;
-    }
-
-    .brand-container p {
-      font-size: 14px;
-      color: #718096;
-    }
-
-    /* Login Card */
-    .login-card {
-      background: #ffffff;
-      padding: 36px 32px;
-      border-radius: 12px;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
-      width: 100%;
-      max-width: 420px;
-      border: 1px solid #e2e8f0;
-    }
-
-    .login-card h2 {
-      font-size: 20px;
-      font-weight: 600;
-      margin-bottom: 24px;
-      color: #2d3748;
-      text-align: left;
-    }
-
-    /* Form Fields */
-    .form-group {
-      margin-bottom: 20px;
-    }
-
-    .form-group label {
-      display: block;
-      font-size: 13px;
-      font-weight: 500;
-      color: #4a5568;
-      margin-bottom: 6px;
-    }
-
-    .input-wrapper {
-      position: relative;
-      display: flex;
-      align-items: center;
-    }
-
-    .input-wrapper input {
-      width: 100%;
-      padding: 12px 40px 12px 40px;
-      border: 1px solid #cbd5e0;
-      border-radius: 8px;
-      font-size: 14px;
-      color: #2d3748;
-      outline: none;
-      transition: border-color 0.2s, box-shadow 0.2s;
-    }
-
-    /* Adjust padding for email input since it doesn't have a right-side toggle */
-    .input-wrapper input.email-input {
-      padding-right: 12px;
-    }
-
-    .input-wrapper input:focus {
-      border-color: #3182ce;
-      box-shadow: 0 0 0 3px rgba(49, 130, 206, 0.15);
-    }
-
-    .input-icon {
-      position: absolute;
-      left: 12px;
-      color: #a0aec0;
-      font-size: 16px;
-    }
-
-    /* Password Toggle Button Styling */
-    .password-toggle {
-      position: absolute;
-      right: 12px;
-      background: none;
-      border: none;
-      cursor: pointer;
-      color: #a0aec0;
-      font-size: 16px;
-      display: flex;
-      align-items: center;
-      padding: 0;
-    }
-
-    .password-toggle:hover {
-      color: #4a5568;
-    }
-
-    /* Form Options (Remember Me & Forgot Password) */
-    .form-options {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      font-size: 14px;
-      margin-bottom: 24px;
-      color: #4a5568;
-    }
-
-    .remember-me {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      cursor: pointer;
-    }
-
-    .remember-me input {
-      accent-color: #3182ce;
-      width: 16px;
-      height: 16px;
-      cursor: pointer;
-    }
-
-    .forgot-link {
-      color: #3182ce;
-      text-decoration: none;
-      font-weight: 500;
-    }
-
-    .forgot-link:hover {
-      text-decoration: underline;
-    }
-
-    /* Submit Button */
-    .login-btn {
-      width: 100%;
-      padding: 12px;
-      background-color: #2563eb;
-      color: white;
-      border: none;
-      border-radius: 8px;
-      font-size: 15px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: background-color 0.2s;
-    }
-
-    .login-btn:hover {
-      background-color: #1d4ed8;
-    }
-
-    /* Footer */
-    .footer-text {
-      margin-top: 24px;
-      font-size: 13px;
-      color: #718096;
-      text-align: center;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vaal Radiology - Intranet Login</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-hover: #1d4ed8;
+            --bg-gradient: linear-gradient(135deg, #ffffff 0%, #ffffff 100%);
+            --card-bg: #ffffff;
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --border-color: #cbd5e1;
+            --focus-ring: rgba(37, 99, 235, 0.25);
+            --radius: 16px;
+        }
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+        body {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--bg-gradient);
+            padding: 24px;
+            color: var(--text-main);
+        }
+        .login-wrapper {
+            width: 100%;
+            max-width: 420px;
+        }
+        .brand-header {
+            text-align: center;
+            margin-bottom: 28px;
+        }
+        .brand-logo {
+            max-height: 60px;
+            width: auto;
+            margin-bottom: 12px;
+            object-fit: contain;
+            display: inline-block;
+        }
+        .brand-header h1 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-main);
+            letter-spacing: -0.02em;
+        }
+        .brand-header p {
+            font-size: 0.875rem;
+            color: var(--text-muted);
+            margin-top: 4px;
+        }
+        .login-card {
+            background: var(--card-bg);
+            padding: 36px 32px;
+            border-radius: var(--radius);
+            box-shadow: 0 20px 25px -5px rgba(15, 23, 42, 0.08), 0 8px 10px -6px rgba(15, 23, 42, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.8);
+        }
+        .card-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 24px;
+            color: var(--text-main);
+            text-align: center;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        .form-group label {
+            display: block;
+            font-size: 0.875rem;
+            font-weight: 500;
+            margin-bottom: 8px;
+            color: #334155;
+        }
+        .input-container {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+        .input-container i {
+            position: absolute;
+            left: 14px;
+            color: #94a3b8;
+            font-size: 1rem;
+            transition: color 0.2s ease;
+        }
+        .input-container input {
+            width: 100%;
+            padding: 12px 14px 12px 42px;
+            font-size: 0.95rem;
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            outline: none;
+            background-color: #f8fafc;
+            color: var(--text-main);
+            transition: all 0.2s ease;
+        }
+        .input-container input:focus {
+            background-color: #ffffff;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px var(--focus-ring);
+        }
+        .input-container input:focus + i,
+        .input-container input:focus ~ i {
+            color: var(--primary);
+        }
+        .forgot-password-container {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: -10px;
+            margin-bottom: 20px;
+        }
+        .forgot-password-link {
+            font-size: 0.85rem;
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 500;
+            cursor: pointer;
+            transition: color 0.2s ease;
+        }
+        .forgot-password-link:hover {
+            color: var(--primary-hover);
+            text-decoration: underline;
+        }
+        .btn-submit {
+            width: 100%;
+            padding: 12px 16px;
+            background-color: var(--primary);
+            color: #ffffff;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 10px;
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
+        }
+        .btn-submit:hover {
+            background-color: var(--primary-hover);
+            transform: translateY(-1px);
+            box-shadow: 0 6px 16px rgba(37, 99, 235, 0.3);
+        }
+        .btn-submit:active {
+            transform: translateY(0);
+        }
+        .footer-note {
+            text-align: center;
+            margin-top: 24px;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+    </style>
 </head>
 <body>
-
-  <!-- Brand & Header -->
-  <div class="brand-container">
-    <img src="logo.png" alt="Vaal Radiology Logo" class="logo">
-    <h1>Vaal Radiology</h1>
-    <p>Authorized Staff Intranet Portal</p>
-  </div>
-
-  <!-- Login Card -->
-  <div class="login-card">
-    <h2>Log in to your account</h2>
-    
-    <form action="#" method="POST">
-      <div class="form-group">
-        <label for="email">Email Address</label>
-        <div class="input-wrapper">
-          <span class="input-icon">✉</span>
-          <input type="email" id="email" class="email-input" placeholder="name@vaalradiology.co.za" required>
+    <div class="login-wrapper">
+        <!-- Logo and Branding Header -->
+        <div class="brand-header">
+            <img src="logo.png" alt="Vaal Radiology Logo" class="brand-logo">
+            <h1>Vaal Radiology</h1>
+            <p>Authorized Staff Intranet Portal</p>
         </div>
-      </div>
 
-      <div class="form-group">
-        <label for="password">Password</label>
-        <div class="input-wrapper">
-          <span class="input-icon">🔒</span>
-          <input type="password" id="password" placeholder="••••••••" required>
-          <!-- Show/Hide Password Toggle Button -->
-          <button type="button" id="togglePassword" class="password-toggle" aria-label="Toggle password visibility">
-            👁️
-          </button>
+        <!-- Login Card -->
+        <div class="login-card">
+            <h2 class="card-title">Log in to your account</h2>
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <div class="input-container">
+                        <i class="fa-regular fa-envelope"></i>
+                        <input type="email" id="email" placeholder="name@vaalradiology.co.za" required autocomplete="email">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <div class="input-container">
+                        <i class="fa-solid fa-lock"></i>
+                        <input type="password" id="password" placeholder="••••••••" required autocomplete="current-password">
+                    </div>
+                </div>
+                
+                <!-- Forgot Password Link -->
+                <div class="forgot-password-container">
+                    <a id="forgotPasswordBtn" class="forgot-password-link">Forgot password?</a>
+                </div>
+
+                <button type="submit" class="btn-submit" id="submitBtn">
+                    <span>Log In</span>
+                    <i class="fa-solid fa-arrow-right"></i>
+                </button>
+            </form>
         </div>
-      </div>
 
-      <!-- Remember Me & Forgot Password Row -->
-      <div class="form-options">
-        <label class="remember-me">
-          <input type="checkbox" id="remember"> Remember this device
-        </label>
-        <a href="#forgot-password" class="forgot-link">Forgot password?</a>
-      </div>
+        <p class="footer-note">&copy; Vaal Radiology. Intranet access only.</p>
+    </div>
 
-      <button type="submit" class="login-btn">Log In &rarr;</button>
-    </form>
-  </div>
+    <!-- Firebase Integration Module -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
+        import { getAuth, signInWithEmailAndPassword, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
+        import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
 
-  <!-- Footer -->
-  <div class="footer-text">
-    &copy; Vaal Radiology. Intranet access only.
-  </div>
+        const firebaseConfig = {
+            apiKey: "AIzaSyBtEdayVkFQ_Ug2S0eFkJktC81HESeUpBE",
+            authDomain: "login-intranet-fb821.firebaseapp.com",
+            projectId: "login-intranet-fb821",
+            storageBucket: "login-intranet-fb821.appspot.com",
+            messagingSenderId: "721373194464",
+            appId: "1:721373194464:web:fc20d062aab1314ac38885",
+            measurementId: "G-G55NCPT2CY"
+        };
 
-  <!-- JavaScript for Password Toggle Functionality -->
-  <script>
-    const passwordInput = document.getElementById('password');
-    const togglePasswordBtn = document.getElementById('togglePassword');
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
 
-    togglePasswordBtn.addEventListener('click', function () {
-      // Toggle the type attribute between password and text
-      const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
-      passwordInput.setAttribute('type', type);
-      
-      // Toggle icon feedback (can adjust emoji or swap with SVG icons if preferred)
-      this.textContent = type === 'password' ? '👁️' : '👁️‍🗨️';
-    });
-  </script>
+        const loginForm = document.getElementById("loginForm");
+        const submitBtn = document.getElementById("submitBtn");
+        const forgotPasswordBtn = document.getElementById("forgotPasswordBtn");
 
+        // Handle Login Submission
+        loginForm.addEventListener("submit", function (e) {
+            e.preventDefault();
+            const email = document.getElementById("email").value;
+            const password = document.getElementById("password").value;
+
+            submitBtn.disabled = true;
+            submitBtn.style.opacity = "0.7";
+            submitBtn.querySelector("span").textContent = "Authenticating...";
+
+            signInWithEmailAndPassword(auth, email, password)
+                .then(() => {
+                    addDoc(collection(db, "loginLogs"), {
+                        email: email,
+                        status: "Success",
+                        timestamp: new Date()
+                    });
+                    window.location.href = "https://sites.google.com/view/vaal-radiology/home";
+                })
+                .catch((error) => {
+                    addDoc(collection(db, "loginLogs"), {
+                        email: email,
+                        status: "Failed: " + error.message,
+                        timestamp: new Date()
+                    });
+                    submitBtn.disabled = false;
+                    submitBtn.style.opacity = "1";
+                    submitBtn.querySelector("span").textContent = "Log In";
+                    alert("Login failed: " + error.message);
+                });
+        });
+
+        // Handle Password Reset Trigger
+        forgotPasswordBtn.addEventListener("click", function (e) {
+            e.preventDefault();
+            const email = document.getElementById("email").value;
+
+            if (!email) {
+                alert("Please enter your email address in the field above first, then click 'Forgot password?'.");
+                document.getElementById("email").focus();
+                return;
+            }
+
+            sendPasswordResetEmail(auth, email)
+                .then(() => {
+                    alert("Password reset email sent! Please check your inbox.");
+                })
+                .catch((error) => {
+                    alert("Error sending password reset email: " + error.message);
+                });
+        });
+    </script>
 </body>
 </html>
